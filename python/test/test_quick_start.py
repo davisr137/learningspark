@@ -11,25 +11,25 @@ class TestQuickStart(unittest.TestCase):
     def setUpClass(cls):
         """
         Read README.md file.
-        """ 
-        cls.textFile = qs.read_readme_file()
+        """
+        cls.text_file = qs.read_readme_file()
 
     def test_count(self):
         """
         Test row count.
         """
-        self.assertEqual(self.textFile.count(), 105)
+        self.assertEqual(self.text_file.count(), 105)
     
     def test_lines_with_spark(self):
         """
         Check how many lines contain 'Spark'.
         """
-        linesWithSpark = self.textFile.filter(self.textFile.value.contains("Spark")) 
-        self.assertEqual(linesWithSpark.count(), 20)
+        lines_with_spark = self.text_file.filter(self.text_file.value.contains("Spark")) 
+        self.assertEqual(lines_with_spark.count(), 20)
 
     def test_to_pandas(self):
         """
         Test toPandas() function.
         """
-        df = self.textFile.toPandas()
+        df = self.text_file.toPandas()
         self.assertIsInstance(df, pd.DataFrame)
