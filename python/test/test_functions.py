@@ -4,9 +4,9 @@ from config import spark
 from pyspark.sql import Row
 from pyspark.sql.functions import *
 
-class TestDataset(unittest.TestCase):
+class TestFunctions(unittest.TestCase):
     """
-    Test basic Spark Dataset functionality.
+    Test basic Spark SQL functions that operate on DataFrames.
     """
     def test_split(self):
         """
