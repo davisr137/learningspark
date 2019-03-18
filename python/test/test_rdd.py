@@ -18,3 +18,13 @@ class TestRDD(unittest.TestCase):
         distData = SC.parallelize(data)
         letters = distData.map(lambda s: len(s)).reduce(lambda a, b: a + b)
         self.assertTrue(letters, 22)
+
+    def test_reduce_by_key(self):
+        """
+        Aggregate elements in RDD by key.
+        """
+        l = ['a','b','a','b','a']
+        letters = SC.parallelize(l)
+        pairs = letters.map(lambda s: (s, 1))
+        counts = pairs.reduceByKey(lambda a, b: a + b)
+        self.assertEqual(counts.collect(), [('b', 2), ('a', 3)])
