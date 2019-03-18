@@ -14,17 +14,24 @@ class TestRDD(unittest.TestCase):
         """
         Compute total letters in list of words using map/reduce.
         """
-        data=['the','quick','brown','fox','jumped']
-        distData = SC.parallelize(data)
-        letters = distData.map(lambda s: len(s)).reduce(lambda a, b: a + b)
+        data = ['the', 'quick', 'brown', 'fox', 'jumped']
+        dist_data = SC.parallelize(data)
+        letters = dist_data.map(lambda s: len(s)).reduce(lambda a, b: a + b)
         self.assertTrue(letters, 22)
 
     def test_reduce_by_key(self):
         """
         Aggregate elements in RDD by key.
         """
-        l = ['a','b','a','b','a']
-        letters = SC.parallelize(l)
+        letters = SC.parallelize(['a', 'b', 'a', 'b', 'a'])
         pairs = letters.map(lambda s: (s, 1))
         counts = pairs.reduceByKey(lambda a, b: a + b)
         self.assertEqual(counts.collect(), [('b', 2), ('a', 3)])
+
+    def test_accumulator(self):
+        """
+        Initialize an accumulator and increment it.
+        """
+        accum = SC.accumulator(0)
+        SC.parallelize([1, 2, 3, 4, 5]).foreach(lambda x: accum.add(x))
+        self.assertEqual(accum.value, 15)
