@@ -50,3 +50,24 @@ class TestParquet(hut.TestCase):
         pd.testing.assert_frame_equal(df_merged_pd, df_expected, check_dtype=False)
         # Remove directory with test data
         shutil.rmtree("%s/data/test_table" % REPO_PATH)
+
+
+class TestJSON(hut.TestCase):
+    """
+    Test JSON utilities.
+    """
+    def test_read_from_disk(self):
+        """
+        Read JSON file from disk and check values.
+        """
+        path = '%s/data/people.json' % REPO_PATH
+        df_people = self.spark.read.json(path)
+        df_people = df_people.toPandas()
+        # Check against expected result.
+        data_dict = {
+            'age' : [np.nan, 30.0, 19.0],
+            'name' : ['Michael', 'Andy', 'Justin']
+        }
+        df_expected = pd.DataFrame.from_dict(data_dict)
+        pd.testing.assert_frame_equal(df_people, df_expected, check_dtype=False)
+
