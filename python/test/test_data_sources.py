@@ -13,6 +13,15 @@ class TestParquet(hut.TestCase):
     """
     Test Parquet utilities.
     """
+    @staticmethod
+    def _format_df(df):
+        """
+        Utility for formatting dataframe
+        """
+        df = df.sort_values('single')
+        df.index = range(len(df))
+        return df
+
     def test_schema_merge(self):
         """
         Merge schemas of two Parquet tables.
@@ -36,11 +45,8 @@ class TestParquet(hut.TestCase):
             'key' : [2, 2, 2, 1, 1, 1],
         }
         df_expected = pd.DataFrame.from_dict(data_dict)
-        df_expected = df_expected.sort_values('single')
-        df_expected.index = range(len(df_expected))
-        df_merged_pd = df_merged.toPandas()
-        df_merged_pd = df_merged_pd.sort_values('single')
-        df_merged_pd.index = range(len(df_merged_pd))
+        df_expected = TestParquet._format_df(df_expected)
+        df_merged_pd = TestParquet._format_df(df_merged.toPandas())
         pd.testing.assert_frame_equal(df_merged_pd, df_expected, check_dtype=False)
         # Remove directory with test data
         shutil.rmtree("%s/data/test_table" % REPO_PATH)
