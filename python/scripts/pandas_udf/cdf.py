@@ -15,8 +15,9 @@ def _main():
     # Parse input arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", "-rows", type=int, default=10**5)
+    parser.add_argument("--log_level", "-log_level", type=str, default='INFO', choices=['INFO','DEBUG','WARNING','ERROR'])
     args = parser.parse_args()
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=getattr(logging, args.log_level))
     # Initilaize Spark session
     conf = SparkConf()
     conf.set('spark.sql.execution.arrow.enabled', True)
