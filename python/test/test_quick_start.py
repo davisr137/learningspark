@@ -1,5 +1,8 @@
 import unittest2 as unittest
 import pandas as pd
+import findspark
+findspark.init()
+from pyspark.sql import SparkSession
 
 import python.quick_start as qs
 
@@ -10,9 +13,10 @@ class TestQuickStart(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """
-        Read README.md file.
+        Initialize Spark context and read README.md file.
         """
-        cls.text_file = qs.read_readme_file()
+        cls.spark = SparkSession.builder.appName("UnitTestQuickStart").getOrCreate()
+        cls.text_file = qs.read_readme_file(cls.spark)
 
     def test_count(self):
         """
@@ -33,3 +37,10 @@ class TestQuickStart(unittest.TestCase):
         """
         df = self.text_file.toPandas()
         self.assertIsInstance(df, pd.DataFrame)
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Stop Spark context.
+        """
+        cls.spark.stop()
