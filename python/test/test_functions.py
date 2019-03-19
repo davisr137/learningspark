@@ -1,18 +1,15 @@
-import unittest2 as unittest
 import pandas as pd
 import findspark
 findspark.init()
 from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import *
 
-class TestFunctions(unittest.TestCase):
+import helpers.unit_test as hut
+
+class TestFunctions(hut.TestCase):
     """
     Test basic Spark SQL functions that operate on DataFrames.
     """
-    @classmethod
-    def setUpClass(cls):
-        cls.spark = SparkSession.builder.appName("UnitTestSQLFunctions").getOrCreate()
-        
     def test_split(self):
         """
         Test 'split' function.
@@ -52,8 +49,3 @@ class TestFunctions(unittest.TestCase):
         df_ct = df.groupBy("word").count().toPandas()
         df_expected = pd.DataFrame(index=[0, 1], columns=['word', 'count'], data=[['hello', 2], ['bonjour', 1]])
         pd.testing.assert_frame_equal(df_ct, df_expected)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.spark.stop()
-

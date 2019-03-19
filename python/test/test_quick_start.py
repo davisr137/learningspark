@@ -1,12 +1,12 @@
-import unittest2 as unittest
 import pandas as pd
 import findspark
 findspark.init()
 from pyspark.sql import SparkSession
 
+import helpers.unit_test as hut
 import python.quick_start as qs
 
-class TestQuickStart(unittest.TestCase):
+class TestQuickStart(hut.TestCase):
     """
     Test code from 'Quick Start' section exercises.
     """
